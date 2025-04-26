@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { SyncLoadingScreen } from "../components/UI/LoadingScreen";
+import { useNavigate } from "react-router-dom"; 
+
 
 const TABLE_HEAD = {
   id: "#",
@@ -50,6 +52,7 @@ import Layout from "../layouts/PageLayout";
 import { apiRoutes } from "../utils/apiRoutes";
 
 export default function DiagnosisList() {
+    const navigate = useNavigate();
   const [diagnosisList, setDiagnosisList] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -57,6 +60,7 @@ export default function DiagnosisList() {
     const fetchDiagnosisList = async () => {
       const data = await getDiagnosisData();
       setDiagnosisList(data);
+      console.log("Diagnosis List: ", data);
       setLoading(false);
     };
     fetchDiagnosisList();
@@ -83,7 +87,7 @@ export default function DiagnosisList() {
       toast.error(err?.response?.data?.message || "Failed to delete diagnosis-symptom");
     }
   };
-  const handleDiagnosisUpdate = async (e, id) => {          
+  const handleDiagnosisUpdate = async (id) => {          
     console.log("Update Diagnosis", id);
     navigate(`/diagnosis/update/${id}`);
   }
@@ -113,7 +117,7 @@ export default function DiagnosisList() {
             searchKey="diagnosis"
             // handleDetail={handlePatientVitalsDetail}
             // detailsFlag={true}
-            // handleUpdate={handleDiagnosisUpdate}
+            handleUpdate={handleDiagnosisUpdate}
             // defaultSortOrder="date"
         />
         </Layout>

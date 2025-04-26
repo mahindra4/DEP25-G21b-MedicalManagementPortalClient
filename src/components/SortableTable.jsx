@@ -475,6 +475,7 @@ export function SortableTable({
                                   <IconButton variant="text"
                                 onClick={(e) => {
                                   console.log("rowData: ", rowData);
+                                  console.log("id: ", rowData["id"]);
                                   handleUpdate(rowData["id"]);
                                 }}
                               >

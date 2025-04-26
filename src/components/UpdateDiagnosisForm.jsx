@@ -9,7 +9,7 @@ import {
   CardFooter,
 } from "@material-tailwind/react";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { apiRoutes } from "../utils/apiRoutes";
 import { SyncLoadingScreen } from "./UI/LoadingScreen";
@@ -17,6 +17,7 @@ import Layout from "../layouts/PageLayout";
 import { setNavigateTimeout, setToastTimeout } from "../utils/customTimeout";
 export default function AddAdminForm() {
     const {id} = useParams();
+    console.log("ID: ", id);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,17 +31,20 @@ export default function AddAdminForm() {
             const response = await axios.get(`${apiRoutes.diagnosis}/${id}`, {
                 withCredentials: true
             });
-            const data = response.data.data;
+            const data = response.data.data[0];
             setFormData({
                 diagnosis: data.diagnosis,
                 symptom: data.symptom
-            })  
+            });
+            console.log("Diagnosis Data: ", data); 
         } catch (error) {   
             console.error(`ERROR (get-admin-list): ${error?.response?.data?.message}`);
             toast.error("Failed to fetch Diagnosis List");
         }
     }
-  },[]);
+    fetchDiagnosisData();
+    // console.log("Diagnosis Data: ", data);
+    },[]);
   const handleChange = (diagnsosis, symptom) => {
     // console.log(e.target);
     // const { name, value } = e.target;
@@ -60,14 +64,16 @@ export default function AddAdminForm() {
     };
     setLoading(true);
     try {
-      const res = await axios.update(`${apiRoutes.diagnosis}/${id}`, sendData, {
+        console.log('Sending data: ', sendData);
+        console.log('url: ', `${apiRoutes.diagnosis}/${id}`);
+      const res = await axios.put(`${apiRoutes.diagnosis}/${id}`, sendData, {
         withCredentials: true
       });
       const data = res?.data;
       setToastTimeout("success", "Diagnosis updated successfully", 200);
     //   console.log("admin record saved successfully");
     //   setToastTimeout("success", "Admin added successfully", 200);
-    //   setNavigateTimeout(navigate, "/admin", 1000);
+      setNavigateTimeout(navigate, "/diagnosis/list", 1000);
     } catch (error) {
       console.error(
         `ERROR (update-diagnosis): ${error?.response?.data?.message}`
@@ -123,7 +129,7 @@ export default function AddAdminForm() {
                     navigate("/diagnosis/list");
                   }}
                 >
-                  Diagnsis List
+                  Diagnosis List
                 </Button>
               </div>
             </div>

@@ -115,13 +115,13 @@ export default function PatientVitalsList() {
             detail="See information about all OPDs."
             // text="Add Prescription"
             // addLink="/prescription/add"
-            // handleDelete={handlePatientVitalsDelete}
-            // justDeleteRecord={true}
+            handleDelete={handlePatientVitalsDelete}
+            justDeleteRecord={true}
             searchKey="opd"
-            // handleDetail={handlePatientVitalsDetail}
-            // detailsFlag={true}
-            // handleUpdate={handlePatientVitalsUpdate}
-            // defaultSortOrder="date"
+            handleDetail={handlePatientVitalsDetail}
+            detailsFlag={true}
+            handleUpdate={handlePatientVitalsUpdate}
+            defaultSortOrder="date"
           />
         </Layout>
       )}
