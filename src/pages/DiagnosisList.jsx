@@ -30,6 +30,7 @@ const mergeSymptomsByDiagnosis = (data) => {
 
 const getDiagnosisData = async () => {
   try {
+    console.log("Fetching Diagnosis List: "+apiRoutes.diagnosis+"/list");
     const response = await axios.get(apiRoutes.diagnosis+"/list", {
       withCredentials: true
     });
@@ -48,7 +49,7 @@ const getDiagnosisData = async () => {
 import Layout from "../layouts/PageLayout";
 import { apiRoutes } from "../utils/apiRoutes";
 
-export default function AdminList() {
+export default function DiagnosisList() {
   const [diagnosisList, setDiagnosisList] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -82,6 +83,10 @@ export default function AdminList() {
       toast.error(err?.response?.data?.message || "Failed to delete diagnosis-symptom");
     }
   };
+  const handleDiagnosisUpdate = async (e, id) => {          
+    console.log("Update Diagnosis", id);
+    navigate(`/diagnosis/update/${id}`);
+  }
   return (
     <>
       {loading && <SyncLoadingScreen />}
@@ -101,14 +106,14 @@ export default function AdminList() {
             tableHead={TABLE_HEAD}
             title="Diagnosis List"
             data={diagnosisList}
-            detail="See information about all OPDs."
+            detail="See information about all Diagnosis."
             text="Add Diagnosis"
             addLink="/diagnosis/add"
             handleDelete={handleDiagnosisDelete}
             searchKey="diagnosis"
             // handleDetail={handlePatientVitalsDetail}
             // detailsFlag={true}
-            // handleUpdate={handlePatientVitalsUpdate}
+            // handleUpdate={handleDiagnosisUpdate}
             // defaultSortOrder="date"
         />
         </Layout>

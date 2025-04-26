@@ -58,6 +58,7 @@ import ObservationList from "./pages/ObservationList";
 import ObservationDetail from "./pages/ObservationDetail";
 import AddDiagnosis from "./pages/AddDiagnosis";
 import DiagnosisList from "./pages/DiagnosisList";
+import UpdateDiagnosis from "./pages/UpdateDiagnosis";
 
 function App() {
   const { userRole } = useAuthContext();
@@ -350,6 +351,11 @@ function App() {
           <Route path="/diagnosis/list" element={ 
             <ProtectedRoute routeName="DIAGNOSIS_LIST">
               <DiagnosisList/>
+            </ProtectedRoute>
+          } /> 
+          <Route path="/diagnosis/update/:id" element={ 
+            <ProtectedRoute routeName="DIAGNOSIS_UPDATE">
+              <UpdateDiagnosis/>
             </ProtectedRoute>
           } /> 
 

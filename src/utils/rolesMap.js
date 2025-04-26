@@ -41,6 +41,7 @@ const roleMapping = new Map([
     [40, "UPDATE_OBSERVATION"],
     [41, "ADD_DIAGNOSIS"],
     [42, "DIAGNOSIS_LIST"],
+    [43, "DIAGNOSIS_UPDATE"],
 ]);
 
 const roleMap = (role) => {
@@ -54,11 +55,11 @@ const roleMap = (role) => {
     
     // Paramedical staff permissions (includes pharmacy and observation permissions)
     const paramedical = [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
-                        19, 20, 21, 22, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42];
+                        19, 20, 21, 22, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43];
     
     // Doctor permissions (includes patient care and observation permissions)
     const doctor = [1, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 21, 22, 28, 30, 
-                   31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42];
+                   31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43];
     
     // Patient permissions (limited to their own data)
     const patient = [25, 27, 29, 30, 18, 31, 38, 39]; // Includes observation access
