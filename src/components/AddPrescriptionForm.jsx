@@ -58,7 +58,14 @@ export default function AddPrescriptionForm() {
   const [hosptialList, setHospitalList] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState({});
   const [receivedOpdId, setReceivedOpdId] = useState("");
-  const [symtomsList, setSymptomsList] = useState([]);
+  const [symtomsList, setSymptomsList] = useState([]); 
+  const [shortageQuantities, setShortageQuantities] = useState({});
+  const [shortageFlag, setShortageFlag] = useState(false);
+  const [dataArray, setDataArray] = useState([
+    { name: "", dosage: "", quantity: "" },
+  ]);
+
+
   // Observation related state
   const [observationDetails, setObservationDetails] = useState([]);
   const [showObservationForm, setShowObservationForm] = useState(false);
@@ -71,6 +78,84 @@ export default function AddPrescriptionForm() {
     days: 1,
     availableQty: 0
   });
+
+
+
+  useEffect(() => {
+    const normalMedicines = {};
+    const availableQuantitiesNormal = {};
+  
+    for (let item of dataArray) {
+      const name = item.name?.label;
+      if (!name) continue;
+      const quantity = parseInt(item.quantity) || 0;
+      const netQuantity = parseInt(item.name?.netQuantity) || 0;
+  
+      normalMedicines[name] = (normalMedicines[name] || 0) + quantity;
+  
+      if (!availableQuantitiesNormal[name]) {
+        availableQuantitiesNormal[name] = netQuantity;
+      }
+    }
+  
+    const observationMedicines = {};
+    const availableQuantitiesObservation = {};
+  
+    for (let item of observationDetails) {
+      const name = item.name;
+      if (!name) continue;
+      const dailyQty = parseInt(item.dailyQuantity) || 0;
+      const days = parseInt(item.days) || 1;
+      const availableQty = parseInt(item.availableQty) || 0;
+  
+      observationMedicines[name] = (observationMedicines[name] || 0) + (dailyQty * days);
+  
+      if (!availableQuantitiesObservation[name]) {
+        availableQuantitiesObservation[name] = availableQty;
+      }
+    }
+  
+    const combinedMedicines = {};
+  
+    for (let name in normalMedicines) {
+      combinedMedicines[name] = (combinedMedicines[name] || 0) + normalMedicines[name];
+    }
+  
+    for (let name in observationMedicines) {
+      combinedMedicines[name] = (combinedMedicines[name] || 0) + observationMedicines[name];
+    }
+  
+    const combinedAvailableQuantities = {};
+  
+    for (let name in availableQuantitiesNormal) {
+      if (!(name in combinedAvailableQuantities)) {
+        combinedAvailableQuantities[name] = availableQuantitiesNormal[name];
+      }
+    }
+  
+    for (let name in availableQuantitiesObservation) {
+      if (!(name in combinedAvailableQuantities)) {
+        combinedAvailableQuantities[name] = availableQuantitiesObservation[name];
+      }
+    }
+  
+    console.log("Combined Needed Quantities:", combinedMedicines);
+    console.log("Combined Available Quantities:", combinedAvailableQuantities);
+    const shortageQuantities = {};
+
+    for (let name in combinedMedicines) {
+      const needed = combinedMedicines[name] || 0;
+      const available = combinedAvailableQuantities[name] || 0;
+      shortageQuantities[name] = needed - available;
+    }
+
+    console.log("Shortage Quantities:", shortageQuantities);
+    setShortageQuantities(shortageQuantities);
+    setShortageFlag(Object.values(shortageQuantities).some(qty => qty > 0));
+  }, [dataArray, observationDetails]);
+  
+  
+
 
   const TABLE_HEAD = [
     "Medicine Name",
@@ -88,9 +173,6 @@ export default function AddPrescriptionForm() {
     "Days",        
     "Action",
   ];
-  const [dataArray, setDataArray] = useState([
-    { name: "", dosage: "", quantity: "" },
-  ]);
 
   const [medicines, setMedicines] = useState([]);
   const [selectedMedicine, setSelectedMedicine] = useState("");
@@ -390,7 +472,7 @@ export default function AddPrescriptionForm() {
     
     let diagnosisVal = "";
     let symptomsVal = "";
-    console.log('-laisudgf uhsa dfuasdfhashf')
+    // console.log('-laisudgf uhsa dfuasdfhashf')
 
     let symptoms = [];
     for (let diagnosis of selectedDiagnosis) {
@@ -503,10 +585,27 @@ export default function AddPrescriptionForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.isUnderObservation && observationDetails.length === 0) {
       toast.error("Please add at least 1 medicine for observation patients");
       return;
     }
+
+    console.log("Handling submit");
+
+    if(shortageFlag) {
+      let shortageMessage = "Shortage of medicines: ";
+      for (const [medicine, quantity] of Object.entries(shortageQuantities)) {
+        if (quantity > 0) {
+          shortageMessage += `${medicine} (${quantity}), `;
+        }
+      }
+      shortageMessage = shortageMessage.slice(0, -2); // Remove the last comma and space
+
+      toast.error(shortageMessage);
+      return;
+    }
+
 
     const checkupListEntry = {
       id: receivedOpdId,
@@ -574,6 +673,8 @@ export default function AddPrescriptionForm() {
       const response = await axios.post(apiRoutes.checkup, data, {
         withCredentials: true,
       });
+      // console.log("response", response.data);
+
       setReceivedOpdId("");
       toast.success(response.data.message);
 
@@ -1017,7 +1118,7 @@ export default function AddPrescriptionForm() {
                 </div>
   
                 {/* Observation Treatment Plan Section */}
-                {formData.isUnderObservation && (
+                {/* {formData.isUnderObservation && (
                   <div className="w-full mt-6">
                     <Typography variant="h6" color="blue-gray" className="mb-4">
                       Observation Treatment Plan
@@ -1180,7 +1281,249 @@ export default function AddPrescriptionForm() {
                       </tbody>
                     </table>
                   </div>
-                )}
+                )} */}
+
+                  
+                 {/* Observation Treatment Plan Section */}
+                 {formData.isUnderObservation && (
+   <div className="w-full mt-6">
+     <Typography variant="h6" color="blue-gray" className="mb-4">
+       Observation Treatment Plan
+     </Typography>
+     <table className="w-full min-w-max table-auto text-left">
+       <thead>
+         <tr>
+           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+             <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+               Medicine
+             </Typography>
+           </th>
+           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+             <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+               Dosage
+             </Typography>
+           </th>
+           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+             <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+               Frequency
+             </Typography>
+           </th>
+           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+             <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+               Daily Qty
+             </Typography>
+           </th>
+           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+             <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+               Avl. Qty
+             </Typography>
+           </th>
+           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+             <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+               Days
+             </Typography>
+           </th>
+           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+             <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+               Action
+             </Typography>
+           </th>
+         </tr>
+       </thead>
+       <tbody>
+         {/* Existing observation details rows */}
+         {observationDetails.map((detail, index) => (
+           <tr key={index} className="even:bg-blue-gray-50/50">
+             <td className="p-4">
+               <div className="w-[200px] border border-gray-300 rounded p-2 h-10 flex items-center">
+                 <Typography variant="small" color="blue-gray" className="truncate">
+                   {detail.name}
+                 </Typography>
+               </div>
+             </td>
+             <td className="p-4">
+               <div className="w-[200px] border border-gray-300 rounded p-2 h-10 flex items-center">
+                 <Typography variant="small" color="blue-gray" className="truncate">
+                   {detail.dosage || "-"}
+                 </Typography>
+               </div>
+             </td>
+             <td className="p-4">
+               <div className="w-[150px] border border-gray-300 rounded p-2 h-10 flex items-center">
+                 <Typography variant="small" color="blue-gray">
+                   {detail.frequency}
+                 </Typography>
+               </div>
+             </td>
+             <td className="p-4">
+               <div className="w-[80px] border border-gray-300 rounded p-2 h-10 flex items-center">
+                 <Typography variant="small" color="blue-gray">
+                   {detail.dailyQuantity}
+                 </Typography>
+               </div>
+             </td>
+             <td className="p-4">
+               <div className="w-[80px] border border-gray-300 rounded p-2 h-10 flex items-center">
+                 <Typography variant="small" color="blue-gray">
+                   {detail.availableQty || "-"}
+                 </Typography>
+               </div>
+             </td>
+             <td className="p-4">
+               <div className="w-[80px] border border-gray-300 rounded p-2 h-10 flex items-center">
+                 <Typography variant="small" color="blue-gray">
+                   {detail.days || "1"}
+                 </Typography>
+               </div>
+             </td>
+             <td className="p-4">
+               <Tooltip content="Delete">
+                 <IconButton
+                   variant="text"
+                   color="red"
+                   onClick={() => removeObservationDetail(index)}
+                 >
+                   <TrashIcon className="h-4 w-4" />
+                 </IconButton>
+               </Tooltip>
+             </td>
+           </tr>
+         ))}
+ 
+         {/* Add new medicine row */}
+         <tr className="even:bg-blue-gray-50/50">
+           <td className="p-4">
+             <div className="w-[200px]">
+               <Select
+                 options={medicines.map(m => ({
+                   value: m.medicineId,
+                   label: m.medicineName,
+                   quantity: m.netQuantity
+                 }))}
+                 value={currentObservationItem.medicineId ? 
+                   { 
+                     value: currentObservationItem.medicineId, 
+                     label: currentObservationItem.name 
+                   } 
+                   : null}
+                 onChange={(selected) => {
+                   const med = medicines.find(m => m.medicineId === selected?.value);
+                   setCurrentObservationItem({
+                     ...currentObservationItem,
+                     medicineId: selected?.value,
+                     name: selected?.label,
+                     availableQty: med?.netQuantity || 0
+                   });
+                 }}
+                 placeholder="Select Medicine"
+                 className="w-full border border-gray-300 rounded h-10"
+                 required
+               />
+             </div>
+           </td>
+           <td className="p-4">
+             <div className="w-[200px]">
+               <Input
+                 type="text"
+                 size="md"
+                 value={currentObservationItem.dosage}
+                 onChange={(e) => setCurrentObservationItem({
+                   ...currentObservationItem,
+                   dosage: e.target.value || undefined 
+                 })}
+                 placeholder="Optional"
+                 className="w-full border border-gray-300 rounded h-10"
+               />
+             </div>
+           </td>
+           <td className="p-4">
+             <div className="w-[150px]">
+               <select
+                 className="w-full border border-gray-300 rounded p-2 h-10"
+                 value={currentObservationItem.frequency}
+                 onChange={(e) => {
+                   const frequency = e.target.value;
+                   let dailyQuantity = currentObservationItem.dailyQuantity;
+                   
+                   if (frequency === "OD") dailyQuantity = "1";
+                   else if (frequency === "BD") dailyQuantity = "2";
+                   else if (frequency === "TDS") dailyQuantity = "3";
+                   else if (frequency === "QID") dailyQuantity = "4";
+                   else if (frequency === "HS") dailyQuantity = "1";
+                   else if (frequency === "SOS") dailyQuantity = "";
+                   
+                   setCurrentObservationItem({
+                     ...currentObservationItem,
+                     frequency,
+                     dailyQuantity
+                   });
+                 }}
+               >
+                 <option value="">Select Frequency</option>
+                 <option value="OD">Once Daily (OD)</option>
+                 <option value="BD">Twice Daily (BD)</option>
+                 <option value="TDS">Thrice Daily (TDS)</option>
+                 <option value="QID">Four Times Daily (QID)</option>
+                 <option value="HS">At Bedtime (HS)</option>
+                 <option value="SOS">As Needed (SOS)</option>
+               </select>
+             </div>
+           </td>
+           <td className="p-4">
+             <div className="w-[200px]">
+               <Input
+                 type="number"
+                 min="1"
+                 size="md"
+                 value={currentObservationItem.dailyQuantity}
+                 onChange={(e) => setCurrentObservationItem({
+                   ...currentObservationItem,
+                   dailyQuantity: e.target.value
+                 })}
+                 className="w-full border border-gray-300 rounded h-10"
+                 required
+                 disabled={currentObservationItem.frequency && currentObservationItem.frequency !== "SOS"}
+               />
+             </div>
+           </td>
+           <td className="p-4">
+             <div className="w-[80px] border border-gray-300 rounded p-2 h-10 flex items-center">
+               <Typography variant="small" color="blue-gray">
+                 {currentObservationItem.availableQty || "-"}
+               </Typography>
+             </div>
+           </td>
+           <td className="p-4">
+             <div className="w-[200px]">
+               <Input
+                 type="number"
+                 min="1"
+                 size="md"
+                 value={currentObservationItem.days || ""}
+                 onChange={(e) => setCurrentObservationItem({
+                   ...currentObservationItem,
+                   days: e.target.value
+                 })}
+                 className="w-full border border-gray-300 rounded h-10"
+               />
+             </div>
+           </td>
+           <td className="p-4">
+             <IconButton 
+               variant="text" 
+               onClick={addObservationDetail}
+               disabled={!currentObservationItem.medicineId || !currentObservationItem.dailyQuantity}
+             >
+               <PlusCircleIcon className="h-5 w-5 text-green-500" />
+             </IconButton>
+           </td>
+         </tr>
+       </tbody>
+     </table>
+   </div>
+ )}
+
+
               </form>
             </CardBody>
             <CardFooter divider={true}>

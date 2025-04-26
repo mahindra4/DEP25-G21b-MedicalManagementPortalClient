@@ -9,6 +9,7 @@ import Layout from "../layouts/PageLayout";
 
 const TABLE_HEAD = {
     id: "#",
+    opd: "OPD",
     patientName: "Patient Name",
     patientEmail: "Email",
     inTime: "In Time",
@@ -43,8 +44,15 @@ export function ProcedureTable() {
     const fetchData = async () => {
       setLoading(true);
       const data = await getProceduresData();
-      console.log("Procedures data:", data);
-      setProcedures(data);
+      const formattedData = data.map((item) => (
+        {
+          ...item,
+          opd: item.id, 
+        }
+      ));
+      setProcedures(formattedData);
+      console.log("Procedures data:", formattedData);
+      console.log("Procedures state:", procedures);
       setLoading(false);
     };
   
@@ -106,7 +114,6 @@ export function ProcedureTable() {
               detailsFlag={true}
               handleUpdate={handleProcedureUpdate}
               defaultSortOrder="inTime"
-              
             />
           </Layout>
         )}

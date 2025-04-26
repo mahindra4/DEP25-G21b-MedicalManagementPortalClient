@@ -63,12 +63,21 @@ const Layout = ({ children }) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
+  const IS_TOGGLED_KEY = "isToggled";
+  useEffect(() => {
+    const toggledData = sessionStorage.getItem(IS_TOGGLED_KEY);
+    if(toggledData !== null){
+      setIsCollapsed(JSON.parse(toggledData));
+    }
+  },[])
+
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
 
   const toggleCollapse = () => {
     setIsCollapsed((prevState) => !prevState);
+    sessionStorage.setItem(IS_TOGGLED_KEY, JSON.stringify(!isCollapsed)); 
   };
 
   const handleLogout = async () => {

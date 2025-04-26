@@ -65,7 +65,7 @@ const roleMap = (role) => {
                    31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46];
     
     // Patient permissions (limited to their own data)
-    const patient = [25, 27, 29, 30, 18, 31, 38, 39]; // Includes observation access
+    const patient = [25, 27, 29]; // removed (admin profile, prescription detail, observation detail)  
 
     let roleArr = [];
 
