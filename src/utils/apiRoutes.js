@@ -1,6 +1,6 @@
 // const baseUrl = import.meta.env.VITE_API_URL;
 
-const baseUrl = "http://localhost:4000/api" 
+const baseUrl = "http://172.30.8.218/api" 
 
 export const apiRoutes = {
   baseUrl,

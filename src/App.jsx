@@ -56,6 +56,8 @@ import UpdateProcedureComponent from "./pages/UpdateProcedure";
 import ProcedureDetail from "./pages/ProcedureDetail";
 import ObservationList from "./pages/ObservationList";
 import ObservationDetail from "./pages/ObservationDetail";
+import AddDiagnosis from "./pages/AddDiagnosis";
+import DiagnosisList from "./pages/DiagnosisList";
 
 function App() {
   const { userRole } = useAuthContext();
@@ -339,6 +341,18 @@ function App() {
               <UpdatePrescription />
             </ProtectedRoute>
           } />
+
+          <Route path="/diagnosis/add" element={ 
+            <ProtectedRoute routeName="ADD_DIAGNOSIS">
+              <AddDiagnosis/>
+            </ProtectedRoute>
+          } /> 
+          <Route path="/diagnosis/list" element={ 
+            <ProtectedRoute routeName="DIAGNOSIS_LIST">
+              <DiagnosisList/>
+            </ProtectedRoute>
+          } /> 
+
           <Route path="/patient_vitals/update/:id" element={
             <ProtectedRoute routeName="ADD_PATIENT_VITALS">
               <UpdatePatientVitals />

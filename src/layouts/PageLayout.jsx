@@ -245,7 +245,7 @@ const Layout = ({ children }) => {
               className="list-none flex flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal overflow-y-auto"
               style={{ color: "#f1ffea" }}
             >
-              {roleArr.includes("PHARMA_DASHBOARD") && (
+              {/* {roleArr.includes("PHARMA_DASHBOARD") && (
                 <a href="/pharmadashboard">
                   <li
                     className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
@@ -259,8 +259,25 @@ const Layout = ({ children }) => {
                     )}
                   </li>
                 </a>
+              )} */}
+              
+              {hasRequiredRole(roleArr, ["PHARMA_DASHBOARD"]) && (
+                <ListItem
+                  className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
+                    hover:bg-blue-gray-50 hover:bg-opacity-80 cursor-pointer h-full"
+                  onClick={() => navigate("/pharmadashboard")}
+                >
+                  <ListItemPrefix>
+                    <UserIcon className="h-5 w-5" style={{ color: "#f1ffea" }} />
+                  </ListItemPrefix>
+                  {!(isCollapsed & !isHovered) && (
+                    <Typography className="font-normal" style={{ color: "#f1ffea" }}>
+                      Dashboard
+                    </Typography>
+                  )}
+                </ListItem>
               )}
-              {roleArr.includes("DOCTOR_DASHBOARD") && (
+              {/* {roleArr.includes("DOCTOR_DASHBOARD") && (
                 <a href="/doctordashboard">
                   <li
                     className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
@@ -274,8 +291,26 @@ const Layout = ({ children }) => {
                     )}
                   </li>
                 </a>
+              )} */}
+
+              {hasRequiredRole(roleArr, ["DOCTOR_DASHBOARD"]) && (
+                <ListItem
+                  className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
+                    hover:bg-blue-gray-50 hover:bg-opacity-80 cursor-pointer h-full"
+                  onClick={() => navigate("/doctordashboard")}
+                >
+                  <ListItemPrefix>
+                    <UserIcon className="h-5 w-5" style={{ color: "#f1ffea" }} />
+                  </ListItemPrefix>
+                  {!(isCollapsed & !isHovered) && (
+                    <Typography className="font-normal" style={{ color: "#f1ffea" }}>
+                      Dashboard
+                    </Typography>
+                  )}
+                </ListItem>
               )}
-              {roleArr.includes("ADMIN_DASHBOARD") && (
+
+              {/* {roleArr.includes("ADMIN_DASHBOARD") && (
                 <a href="/admindashboard">
                   <li
                     className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
@@ -289,8 +324,25 @@ const Layout = ({ children }) => {
                     )}
                   </li>
                 </a>
+              )} */}
+
+              {hasRequiredRole(roleArr, ["ADMIN_DASHBOARD"]) && (
+                <ListItem
+                  className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
+                    hover:bg-blue-gray-50 hover:bg-opacity-80 cursor-pointer h-full"
+                  onClick={() => navigate("/admindashboard")}
+                >
+                  <ListItemPrefix>
+                    <UserIcon className="h-5 w-5" style={{ color: "#f1ffea" }} />
+                  </ListItemPrefix>
+                  {!(isCollapsed & !isHovered) && (
+                    <Typography className="font-normal" style={{ color: "#f1ffea" }}>
+                      Dashboard
+                    </Typography>
+                  )}
+                </ListItem>
               )}
-              {roleArr.includes("REQUESTS") && (
+              {/* {roleArr.includes("REQUESTS") && (
                 <a href="/requests">
                   <li
                     className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
@@ -304,9 +356,26 @@ const Layout = ({ children }) => {
                     )}
                   </li>
                 </a>
+              )} */}
+
+              {hasRequiredRole(roleArr, ["REQUESTS"]) && (
+                <ListItem
+                  className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
+                    hover:bg-blue-gray-50 hover:bg-opacity-80 cursor-pointer h-full"
+                  onClick={() => navigate("/requests")}
+                >
+                  <ListItemPrefix>
+                    <UserIcon className="h-5 w-5" style={{ color: "#f1ffea" }} />
+                  </ListItemPrefix>
+                  {!(isCollapsed & !isHovered) && (
+                    <Typography className="font-normal" style={{ color: "#f1ffea" }}>
+                      Requests
+                    </Typography>
+                  )}
+                </ListItem>
               )}
 
-              {roleArr.includes("MEDICAL_HISTORY") && (
+              {/* {roleArr.includes("MEDICAL_HISTORY") && (
                 <a href="/prescription/patient">
                   <li
                     className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
@@ -320,9 +389,26 @@ const Layout = ({ children }) => {
                     )}
                   </li>
                 </a>
+              )} */}
+
+              {hasRequiredRole(roleArr, ["MEDICAL_HISTORY"]) && (
+                <ListItem
+                  className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
+                    hover:bg-blue-gray-50 hover:bg-opacity-80 cursor-pointer h-full"
+                  onClick={() => navigate("/prescription/patient")}
+                >
+                  <ListItemPrefix>
+                    <UserIcon className="h-5 w-5" style={{ color: "#f1ffea" }} />
+                  </ListItemPrefix>
+                  {!(isCollapsed & !isHovered) && (
+                    <Typography className="font-normal" style={{ color: "#f1ffea" }}>
+                      Med History
+                    </Typography>
+                  )}
+                </ListItem>
               )}
 
-              {roleArr.includes("DOCTOR_SCHEDULE") && (
+              {/* {roleArr.includes("DOCTOR_SCHEDULE") && (
                 <a href="/schedule/doctor">
                   <li
                     className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
@@ -336,6 +422,23 @@ const Layout = ({ children }) => {
                     )}
                   </li>
                 </a>
+              )} */}
+
+              {hasRequiredRole(roleArr, ["DOCTOR_SCHEDULE"]) && (
+                <ListItem
+                  className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
+                    hover:bg-blue-gray-50 hover:bg-opacity-80 cursor-pointer h-full"
+                  onClick={() => navigate("/schedule/doctor")}
+                >
+                  <ListItemPrefix>
+                    <UserIcon className="h-5 w-5" style={{ color: "#f1ffea" }} />
+                  </ListItemPrefix>
+                  {!(isCollapsed & !isHovered) && (
+                    <Typography className="font-normal" style={{ color: "#f1ffea" }}>
+                      Doctor Schedule
+                    </Typography>
+                  )}
+                </ListItem>
               )}
 
               {hasRequiredRole(roleArr, ["STOCK_LIST", "OUT_OF_STOCK"]) && (
@@ -696,7 +799,7 @@ const Layout = ({ children }) => {
                   )}
                 </Accordion>
               )}
-              {hasRequiredRole(roleArr, ["ADD_PRESCRIPTION", "PRESCRIPTION_LIST", "OBSERVATION_LIST", "PATIENT_VITALS"]) && (
+              {hasRequiredRole(roleArr, ["ADD_PRESCRIPTION", "PRESCRIPTION_LIST", "OBSERVATION_LIST", "PATIENT_VITALS", "ADD_DIAGNOSIS", "DIAGNOSIS_LIST"]) && (
                 <Accordion
                   open={open === 5}
                   icon={
@@ -767,7 +870,24 @@ const Layout = ({ children }) => {
                             Patient Vitals
                           </ListItem>
                         )}
+                        {hasRequiredRole(roleArr, ["ADD_DIAGNOSIS"]) && (
+                          <ListItem
+                            className="ml-9"
+                            onClick={() => navigate("/diagnosis/add")}
+                          >
+                            Add Diagnosis
+                          </ListItem>
+                        )}
+                        {hasRequiredRole(roleArr, ["DIAGNOSIS_LIST"]) && (
+                          <ListItem
+                            className="ml-9"
+                            onClick={() => navigate("/diagnosis/list")}
+                          >
+                            Diagnosis List
+                          </ListItem>
+                        )}
                       </List>
+                      
                     </AccordionBody>
                   )}
                 </Accordion>
