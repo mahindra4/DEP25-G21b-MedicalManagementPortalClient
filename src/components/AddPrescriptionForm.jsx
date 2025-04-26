@@ -15,6 +15,7 @@ import {
   IconButton,
   Textarea,
   Checkbox,
+  select,
 } from "@material-tailwind/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +25,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import Layout from "../layouts/PageLayout";
 import { SyncLoadingScreen } from "./UI/LoadingScreen";
 import { use } from "react";
+
 
 export default function AddPrescriptionForm() {
   const navigate = useNavigate();
@@ -56,7 +58,7 @@ export default function AddPrescriptionForm() {
   const [hosptialList, setHospitalList] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState({});
   const [receivedOpdId, setReceivedOpdId] = useState("");
-
+  const [symtomsList, setSymptomsList] = useState([]);
   // Observation related state
   const [observationDetails, setObservationDetails] = useState([]);
   const [showObservationForm, setShowObservationForm] = useState(false);
@@ -337,6 +339,7 @@ export default function AddPrescriptionForm() {
       const response = await axios.get(`${apiRoutes.diagnosis}/symptoms`, {
         withCredentials: true
       });
+      console.log("Diagnosis Symptoms List: ", response.data.data);
       setDiagnosisSymptomsList(response.data.data);
     } catch (err) {
       console.error(`Error in fetching Diagnosis Symptoms List: ${err?.response.data?.message}`);
@@ -351,7 +354,11 @@ export default function AddPrescriptionForm() {
       const response = await axios.get(apiRoutes.hospitals, {
         withCredentials: true
       });
-      setHospitalList(response.data.data);
+      console.log("hospital list: ", response.data.data);
+      const Hospitaldata = response.data.data.map((item) => {
+        return item.name;
+      })
+      setHospitalList(Hospitaldata);
     } catch (err) {
       console.error(`Error in fetching Hospital List: ${err?.response.data?.message}`);
       toast.error(
@@ -383,7 +390,9 @@ export default function AddPrescriptionForm() {
     
     let diagnosisVal = "";
     let symptomsVal = "";
+    console.log('-laisudgf uhsa dfuasdfhashf')
 
+    let symptoms = [];
     for (let diagnosis of selectedDiagnosis) {
       if (diagnosisVal === "") {
         diagnosisVal = diagnosis.value;
@@ -391,11 +400,22 @@ export default function AddPrescriptionForm() {
         diagnosisVal = diagnosisVal + ", " + diagnosis.value;
       }
       const symptomsList = diagnosisSymptomsList[diagnosis.value].join(", ");
-      if (symptomsVal === "") {
-        symptomsVal = symptomsList;
-      } else {
-        symptomsVal = symptomsVal + ", " + symptomsList;
+      for (let symptom of diagnosisSymptomsList[diagnosis.value]) {
+        symptoms.push(symptom);
       }
+      // if (symptomsVal === "") {
+      //   symptomsVal = symptomsList;
+      // } else {
+      //   symptomsVal = symptomsVal + ", " + symptomsList;
+      // }
+    }
+
+
+    console.log('symtoms in handle diagnosis change: ', symptoms);
+    if (symptoms.length > 0) {
+      // lets get the unique symptoms
+      const uniqueSymptoms = [...new Set(symptoms)];
+      symptomsVal = uniqueSymptoms.join(", ");
     }
 
     sessionStorage.setItem(HANDLE_DIAGNOSIS_VALUE_CHANGE, diagnosisVal);

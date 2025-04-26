@@ -59,6 +59,12 @@ import ObservationDetail from "./pages/ObservationDetail";
 import AddDiagnosis from "./pages/AddDiagnosis";
 import DiagnosisList from "./pages/DiagnosisList";
 import UpdateDiagnosis from "./pages/UpdateDiagnosis";
+// import AddHospitalForm from "./pages/AddHospital";
+// import HospitalList from "./pages/hospitalList";
+// import UpdateHospitalForm from "./pages/UpdateHospital";
+import AddHospitalForm from "./pages/AddHospital";
+import HospitalList from "./pages/HospitalList";
+import UpdateHospitalForm from "./pages/UpdateHospital";
 
 function App() {
   const { userRole } = useAuthContext();
@@ -87,6 +93,22 @@ function App() {
               <UpdatePrescription />
             </ProtectedRoute>
           } />
+          {/* Hospital Routes */}
+          <Route path="/hospital/add" element={
+             <ProtectedRoute routeName="ADD_HOSPITAL">
+               <AddHospitalForm />
+             </ProtectedRoute>
+           } />
+           <Route path="/hospitals" element={
+             <ProtectedRoute routeName="HOSPITAL_LIST">
+               <HospitalList />
+             </ProtectedRoute>
+           } />
+           <Route path="/Hospital/update/:id" element={
+             <ProtectedRoute routeName="UPDATE_HOSPITAL">
+               <UpdateHospitalForm />
+             </ProtectedRoute>
+           } />
 
           {/* Profile Routes */}
           <Route path="/profile/staff" element={
@@ -119,7 +141,6 @@ function App() {
               <AdminProfile edit={true} />
             </ProtectedRoute>
           } />
-
           {/* Pharmacy Routes */}
           <Route path="/pharmadashboard" element={
             <ProtectedRoute routeName="PHARMA_DASHBOARD">

@@ -39,6 +39,8 @@ import {
   ChevronDownIcon,
   Bars3Icon,
   XMarkIcon,
+  BuildingOfficeIcon,
+  DocumentIcon,
 } from "@heroicons/react/24/outline";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
@@ -575,6 +577,66 @@ const Layout = ({ children }) => {
                 </Accordion>
               )}
 
+              
+            {hasRequiredRole(roleArr, ["ADD_HOSPITAL", "HOSPITAL_LIST"]) && (
+                <Accordion
+                  open={open === 11}
+                  icon={
+                    !(isCollapsed & !isHovered) && (
+                      <ChevronDownIcon
+                        style={{ color: "#f1ffea" }}
+                        strokeWidth={2.5}
+                        className={`mx-auto h-4 w-4 transition-transform ${
+                          open === 11 ? "rotate-180" : ""
+                        }`}
+                      />
+                    )
+                  }
+                >
+                  <ListItem className="p-0" selected={open === 9}>
+                    <AccordionHeader
+                      onClick={() => handleOpen(11)}
+                      className="border-b-0 p-3"
+                    >
+                      <ListItemPrefix>
+                        <BuildingOfficeIcon
+                          className="h-5 w-5"
+                          style={{ color: "#f1ffea" }}
+                        />
+                      </ListItemPrefix>
+                      {!(isCollapsed & !isHovered) && (
+                        <Typography
+                          style={{ color: "#f1ffea" }}
+                          className="mr-auto font-normal"
+                        >
+                          Hospital
+                        </Typography>
+                      )}
+                    </AccordionHeader>
+                  </ListItem>
+                  {!(isCollapsed & !isHovered) && (
+                    <AccordionBody className="py-1">
+                      <List className="p-0" style={{ color: "#f1ffea" }}>
+                      {hasRequiredRole(roleArr, ["ADD_HOSPITAL"]) && <ListItem
+                          className="ml-9"
+                          onClick={() => navigate("/hospital/add")}
+                        >
+                          Add Hospital
+                        </ListItem>}
+                        {hasRequiredRole(roleArr, ["HOSPITAL_LIST"]) && <ListItem
+                          className="ml-9"
+                          onClick={() => navigate("/hospitals")}
+                        >
+                          Hospital List
+                        </ListItem>}
+                      </List>
+                    </AccordionBody>
+                  )}
+                </Accordion>
+              )}
+ 
+
+
               {hasRequiredRole(roleArr, ["ADD_PURCHASE", "PURCHASE_LIST"]) && (
                 <Accordion
                   open={open === 2}
@@ -799,7 +861,75 @@ const Layout = ({ children }) => {
                   )}
                 </Accordion>
               )}
-              {hasRequiredRole(roleArr, ["ADD_PRESCRIPTION", "PRESCRIPTION_LIST", "OBSERVATION_LIST", "PATIENT_VITALS", "ADD_DIAGNOSIS", "DIAGNOSIS_LIST"]) && (
+
+
+          {hasRequiredRole(roleArr, ["ADD_DIAGNOSIS", "DIAGNOSIS_LIST"]) && (
+                <Accordion
+                  open={open === 13}
+                  icon={
+                    !(isCollapsed & !isHovered) && (
+                      <ChevronDownIcon
+                        style={{ color: "#f1ffea" }}
+                        strokeWidth={2.5}
+                        className={`mx-auto h-4 w-4 transition-transform ${
+                          open === 5 ? "rotate-180" : ""
+                        }`}
+                      />
+                    )
+                  }
+                >
+                  <ListItem className="p-0" selected={open === 13}>
+                    <AccordionHeader
+                      onClick={() => handleOpen(13)}
+                      className="border-b-0 p-3"
+                    >
+                      <ListItemPrefix>
+                        <DocumentIcon
+                          className="h-5 w-5"
+                          style={{ color: "#f1ffea" }}
+                        />
+                      </ListItemPrefix>
+                      {!(isCollapsed & !isHovered) && (
+                        <Typography
+                          style={{ color: "#f1ffea" }}
+                          className="mr-auto font-normal"
+                        >
+                          Diagnosis
+                        </Typography>
+                      )}
+                    </AccordionHeader>
+                  </ListItem>
+                  {!(isCollapsed & !isHovered) && (
+                    <AccordionBody className="py-1">
+                      <List className="p-0" style={{ color: "#f1ffea" }}>
+                        {hasRequiredRole(roleArr, ["ADD_DIAGNOSIS"]) && (
+                          <ListItem
+                            className="ml-9"
+                            onClick={() => navigate("/diagnosis/add")}
+                          >
+                            Add Diagnosis
+                          </ListItem>
+                        )}
+                        {hasRequiredRole(roleArr, ["DIAGNOSIS_LIST"]) && (
+                          <ListItem
+                            className="ml-9"
+                            onClick={() => navigate("/diagnosis/list")}
+                          >
+                            Diagnosis List
+                          </ListItem>
+                        )}
+                      </List>
+                      
+                    </AccordionBody>
+                  )}
+                </Accordion>
+              )}
+
+
+
+
+
+              {hasRequiredRole(roleArr, ["ADD_PRESCRIPTION", "PRESCRIPTION_LIST", "OBSERVATION_LIST", "PATIENT_VITALS"]) && (
                 <Accordion
                   open={open === 5}
                   icon={
@@ -870,28 +1000,15 @@ const Layout = ({ children }) => {
                             Patient Vitals
                           </ListItem>
                         )}
-                        {hasRequiredRole(roleArr, ["ADD_DIAGNOSIS"]) && (
-                          <ListItem
-                            className="ml-9"
-                            onClick={() => navigate("/diagnosis/add")}
-                          >
-                            Add Diagnosis
-                          </ListItem>
-                        )}
-                        {hasRequiredRole(roleArr, ["DIAGNOSIS_LIST"]) && (
-                          <ListItem
-                            className="ml-9"
-                            onClick={() => navigate("/diagnosis/list")}
-                          >
-                            Diagnosis List
-                          </ListItem>
-                        )}
                       </List>
                       
                     </AccordionBody>
                   )}
                 </Accordion>
               )}
+
+
+
               {hasRequiredRole(roleArr, ["ADD_STAFF", "STAFF_LIST"]) && (
                 <Accordion
                   open={open === 6}

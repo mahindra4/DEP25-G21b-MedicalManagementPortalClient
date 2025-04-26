@@ -55,7 +55,11 @@ export function AddProcedure() {
                 const response = await axios.get(apiRoutes.hospitals, {
                     withCredentials: true
                 });
-                setHospitalList(response.data.data);
+                const Hospitaldata = response.data.data.map((item) => {
+                    return item.name;
+                  })
+                setHospitalList(Hospitaldata);
+                // setHospitalList(response.data.data);
             } catch (error) {
                 console.error(`Error in fetching Hospital List: ${error?.response?.data?.message}`);
                 toast.error(
