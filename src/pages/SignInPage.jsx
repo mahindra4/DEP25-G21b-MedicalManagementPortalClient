@@ -119,6 +119,7 @@ export default function SignInPage() {
     } catch (err) {
       console.error(`ERROR (login): ${err?.response?.data?.message}`);
       toast.error(err?.response?.data?.message);
+      // toast.error("Only IIT Ropar emails are allowed. Please use your @iitrpr.ac.in email.");
     }
     setLoading(false);
   };

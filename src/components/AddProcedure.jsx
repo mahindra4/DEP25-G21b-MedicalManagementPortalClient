@@ -52,8 +52,20 @@ export function AddProcedure() {
                 const today = new Date();
                 const datePrefix = `${today.getDate().toString().padStart(2, '0')}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getFullYear().toString().slice(-2)}`;
 
+                // Get all procedures with today's date prefix
                 const todayProcedures = procedureRes.data.filter((p) => p.id?.startsWith(datePrefix));
-                const nextIncrement = todayProcedures.length + 1;
+                
+                // Extract all used numbers for today's procedures
+                const usedNumbers = todayProcedures.map(p => {
+                    const parts = p.id.split('-');
+                    return parseInt(parts[parts.length - 1], 10);
+                });
+                
+                // Find the first available number (including gaps from deleted procedures)
+                let nextIncrement = 1;
+                while (usedNumbers.includes(nextIncrement)) {
+                    nextIncrement++;
+                }
 
                 const opdNumber = `${datePrefix}-${nextIncrement}`;
 

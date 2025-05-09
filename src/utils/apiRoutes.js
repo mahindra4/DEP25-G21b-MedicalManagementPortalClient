@@ -31,6 +31,7 @@ export const apiRoutes = {
     update: (id) => `${baseUrl}/observation/${id}`,
     delete: (id) => `${baseUrl}/observation/${id}`
   },
+  VisitingSpecialist: `${baseUrl}/VisitingSpecialist`,
 };
 
 // console.log(apiRoutes)
