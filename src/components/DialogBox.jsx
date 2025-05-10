@@ -15,6 +15,9 @@ export default function DialogBox({
     deletedRecordId = "",
     setDeletedRecordId = ()=>{},
   }) {
+
+
+    console.log('title: ',title);
     const handleDialogResponse = () => {
       setOpen(false);
       setDeletedRecordId(null);

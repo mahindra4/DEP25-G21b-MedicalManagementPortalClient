@@ -62,6 +62,7 @@ export function SortableTable({
   defaultSortOrder = "action",
 }) {
 
+  console.log('sortable table title: ',title);
 
   const [open, setOpen] = useState(false);
   const [deletedRecordId, setDeletedRecordId] = useState(null);
@@ -147,8 +148,7 @@ export function SortableTable({
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
 
     // Create a blob from the buffer and save it
-    const fileType =
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileExtension = ".xlsx";
     const data = new Blob([excelBuffer], { type: fileType });
     saveAs(data, `${title}${fileExtension}`);
@@ -555,7 +555,6 @@ export function SortableTable({
           </div>
         </div>
       </CardFooter>
-
       {justDeleteRecord ? 
         <PatientVitalsDialogBox
           title={title.split(" ")[0]}

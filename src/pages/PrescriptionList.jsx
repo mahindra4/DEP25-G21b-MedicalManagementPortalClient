@@ -153,6 +153,7 @@ export default function PrescriptionList() {
                 searchKey="patientName"
                 detail="See information about all OPDs."
                 addLink="/prescription/add"
+                text="Add Prescription"
                 handleDelete={handlePrescriptionDelete}
                 handleDetail={handlePrescriptionDetail}
                 handleUpdate={handlePrescriptionUpdate}

@@ -66,6 +66,7 @@ import AddHospitalForm from "./pages/AddHospital";
 import HospitalList from "./pages/HospitalList";
 import UpdateHospitalForm from "./pages/UpdateHospital";
 import VisitingSpecialist from "./pages/VisitingSpecialist.jsx";
+import ObservationHistory from "./pages/ObservationHistory";
 
 function App() {
   const { userRole } = useAuthContext();
@@ -82,6 +83,12 @@ function App() {
           <Route path="/visiting-specialist" element={
             <ProtectedRoute routeName="VISITING_SPECIALIST_LIST">
               <VisitingSpecialist />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/observation/history" element={
+            <ProtectedRoute routeName="VIEW_PATIENT_OBSERVATIONS">
+              <ObservationHistory />
             </ProtectedRoute>
           } />
 

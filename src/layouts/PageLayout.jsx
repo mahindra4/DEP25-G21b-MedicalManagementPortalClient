@@ -1244,6 +1244,23 @@ const Layout = ({ children }) => {
                   )}
                 </Accordion>
               )}
+
+              {roleArr.includes("VIEW_PATIENT_OBSERVATIONS") && (
+                <a href="/observation/history">
+                  <li
+                    className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all
+                      hover:bg-blue-gray-50 hover:bg-opacity-80 cursor-pointer h-full"
+                  >
+                    <ClipboardDocumentListIcon className="h-5 w-5 mr-4" />
+                    {!(isCollapsed & !isHovered) && (
+                      <Typography className="font-normal">
+                        Observation History
+                      </Typography>
+                    )}
+                  </li>
+                </a>
+              )}
+
             </ul>
           </div>
         </div>

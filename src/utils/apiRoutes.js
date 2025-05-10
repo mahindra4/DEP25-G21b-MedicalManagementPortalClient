@@ -27,6 +27,8 @@ export const apiRoutes = {
   observation: {
     base: `${baseUrl}/observation`,
     list: `${baseUrl}/observation`,
+    patient: `${baseUrl}/observation/patient`,
+    history: (email) => `${baseUrl}/observation/history/${email}`,
     detail: (id) => `${baseUrl}/observation/${id}`,
     update: (id) => `${baseUrl}/observation/${id}`,
     delete: (id) => `${baseUrl}/observation/${id}`

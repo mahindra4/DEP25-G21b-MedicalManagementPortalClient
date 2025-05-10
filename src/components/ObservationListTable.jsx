@@ -58,13 +58,11 @@ export default function ObservationListTable() {
     loadData();
   }, []);
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this observation?');
-    if (!confirmDelete) return;
+  const handleDelete = async (e, id) => {
   
     try {
-      setDeletingId(id);
-      const response = await axios.delete(`${apiRoutes.observation}/${id}`, {
+      // setDeletingId(id);
+      const response = await axios.delete(apiRoutes.observation.delete(id), {
         withCredentials: true
       });
       
@@ -80,49 +78,39 @@ export default function ObservationListTable() {
                  error.response?.data?.message || 
                  'Failed to delete observation');
     } finally {
-      setDeletingId(null);
+      // setDeletingId(null);
     }
   };
 
-  const handleViewDetails = (rowData) => {
+  const handleViewDetails = async (e, id, idx) => {
+    console.log('handle view: ',id, idx);
     try {
-      if (!rowData?.id) {
-        throw new Error('Observation data is missing ID');
-      }
+      // if (!id) {
+      //   throw new Error('Observation data is missing ID');
+      // }
+      console.log('handle view observation data');
       // Use the checkupId as the second parameter
-      navigate(`/observation/view/${rowData.id}^${rowData.checkupId}`);
+      navigate(`/observation/view/${id}^${idx}`);
     } catch (error) {
       console.error('Error in handleViewDetails:', error);
       toast.error('Failed to view observation details');
     }
   };
 
-  const handleEdit = (rowData) => {
-    try {
-      console.log("Full row data received:", rowData); // Should now show full object
-      
-      // Get checkupId from either root or nested checkup object
-      const checkupId = rowData.checkupId || rowData?.checkup?.id;
-      
-      if (!checkupId) {
-        console.error("No checkupId found in:", rowData);
-        throw new Error('Observation data is missing checkup ID');
-      }
-      
-      console.log("Navigating to update with checkupId:", checkupId);
-      navigate(`/prescription/update/${checkupId}`);
-    } catch (error) {
-      console.error('Edit error:', error);
-      toast.error(`Failed to edit observation: ${error.message}`);
-    }
+
+  const handleEdit = async (id) => {
+    console.log("patient under observation Edit", id);
+    navigate(`/prescription/update/${id}`);
   };
+
+
   if (loading) return <SyncLoadingScreen />;
 
   return (
     <Layout>
       <SortableTable
         tableHead={TABLE_HEAD}
-        title="Patients Under Observation"
+        title="PatientsUnderObservation"
         data={observations}
         detail="View and manage all patients under medical observation"
         text="Add New Observation"
@@ -133,7 +121,7 @@ export default function ObservationListTable() {
         detailsFlag={true}
         handleUpdate={handleEdit}
         defaultSortOrder="date"
-        isDeleting={(id) => deletingId === id}
+        // isDeleting={(id) => deletingId === id}
       />
     </Layout>
   );
