@@ -100,7 +100,7 @@ export default function ObservationListTable() {
 
   const handleEdit = async (id) => {
     console.log("patient under observation Edit", id);
-    navigate(`/prescription/update/${id}`);
+    navigate(`/observation/update/${id}`);
   };
 
 

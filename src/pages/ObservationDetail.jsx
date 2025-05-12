@@ -79,31 +79,25 @@ const ObservationDetail = () => {
     
     const dateObj = data.checkup?.date ? new Date(data.checkup.date) : new Date();
     
+    console.log('data: ',data)
     const formattedData =  {
       id: data.id,
-      patientName: data.patientName || data.checkup?.Patient?.name || "-",
-      doctorName: data.doctorName || data.checkup?.Doctor?.name || "-",
-      staffName: data.staffName || data.checkup?.Staff?.name || "-",
-      date: dateObj.toLocaleDateString(),
-      time: dateObj.toLocaleTimeString(),
-      temperature: data.temperature || data.checkup?.temperature || "-",
-      bloodPressure: data.bloodPressure || data.checkup?.bloodPressure || "-",
-      spO2: data.spO2 || data.checkup?.spO2 || "-",
-      pulseRate: data.pulseRate || data.checkup?.pulseRate || "-",
-      diagnosis: data.diagnosis || data.checkup?.diagnosis || "-",
-      symptoms: data.symptoms || data.checkup?.symptoms || "-",
-      referredDoctor: data.referredDoctor || data.checkup?.referredDoctor || "-",
-      referredHospital: data.referredHospital || data.checkup?.referredHospital || "-",
+      patientName: data.patient?.name || "-",
+      doctorName: data.doctor?.name  || "-",
+      staffName: data.staff?.name || "-",
+      date: data.date,
+      time: data.time,
+      temperature: data.temperature || "-",
+      bloodPressure: data.bloodPressure || "-",
+      spO2: data.spO2 || "-",
+      pulseRate: data.pulseRate || "-",
+      diagnosis: data.diagnosis ||  "-",
+      symptoms: data.symptoms ||  "-",
+      referredDoctor: data.referredDoctor || "-",
+      referredHospital: data.referredHospital || "-",
       isUnderObservation: data.isUnderObservation || false,
-      checkupMedicines: data.checkupMedicines || data.checkup?.CheckupMedicine || [],
-      observationMedicines: data.observationMedicines || (data.observation ? [{
-        brandName: data.observation.medicine?.brandName || "-",
-        dosage: data.observation.dosage || "-",
-        frequency: data.observation.frequency || "-",
-        dailyQuantity: data.observation.dailyQuantity || 0,
-        days: data.observation.days || 0,
-        totalQuantity: (data.observation.dailyQuantity || 0) * (data.observation.days || 0)
-      }] : [])
+      checkupMedicines: data.checkupMedicines || [],
+      observationMedicines: data.observationMedicines || [],
     };
     console.log('data: ');
     console.log(formattedData);

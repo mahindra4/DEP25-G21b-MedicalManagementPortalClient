@@ -153,16 +153,18 @@ export default function UpdatePrescriptionForm() {
       setDataArray(checkupMedicines);
 
       // Set observation details if exists
-      if (prescriptionData.observationDetails) {
-        setObservationDetails(prescriptionData.observationDetails.map(obs => ({
+      if (prescriptionData.isUnderObservation) {
+          const obs = prescriptionData.observationDetails;
+          const formattedData = [{
           medicineId: obs.medicineId,
-          name: obs.medicine?.brandName || '',
+          name: obs.brandName || '',
           dosage: obs.dosage || '',
           frequency: obs.frequency || '',
           dailyQuantity: obs.dailyQuantity || 0,
           days: obs.days || 1,
           availableQty: obs.availableQuantity || 0
-        })));
+        }];
+        setObservationDetails(formattedData);
       }
     } catch (error) {
       console.error(`ERROR (fetch-prescription-in-update-prescription): ${error?.response?.data?.message}`);

@@ -83,17 +83,116 @@ export default function UpdatePatientUnderObservationForm() {
     availableQty: 0
   });
 
+  const [observationData, setObservationData] = useState([]);
+
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true);
-      await fetchUpdatedAvailableStock();
-      await fetchDoctors();
-      await fetchPatients();
-      await fetchPrescriptionData();
-      setLoading(false);
+        setLoading(true);
+        await fetchUpdatedAvailableStock();
+        await fetchDoctors();
+        await fetchPatients();
+        // await fetchPrescriptionData();
+        await fetchObservationDetail();
+        setLoading(false);
     };
     loadData();
   }, []);
+
+
+
+  const fetchObservationDetail = async () => {
+    try {
+      const response = await axios.get(apiRoutes.observation.detail(id), {
+        withCredentials: true
+      });
+      
+      if (!response.data || !response.data.data) {
+        throw new Error("No observation data received from server");
+      }
+      
+      const data =  response.data.data;
+      // const formattedData = formatObservationData(data);
+      console.log('formated puo: ')
+      console.log(data);
+
+      setFormData({
+        date: data.date,
+        temperature: data.temperature,
+        bloodPressure: data.bloodPressure,
+        pulseRate: data.pulseRate,
+        spO2: data.spO2,
+        symptoms: data.symptoms,
+        diagnosis: data.diagnosis,
+        referredDoctor: data.referredDoctor,
+        referredHospital: data.referredHospital,
+        isUnderObservation: data.isUnderObservation || false,
+      });
+
+
+      setSelectedPatient({
+        value: data.patient.id,
+        label: data.patient.email,
+        name: data.patient.name,
+      });
+
+      setSelectedDoctor({
+        value: data.doctor.id,
+        label: data.doctor.email,
+      })
+
+      // setObservationData(formattedData);
+      // return formattedData;
+    } catch (error) {
+      console.error("Error fetching observation:", error);
+      let errorMessage = "Failed to fetch observation details";
+      
+      if (error.response) {
+        errorMessage = error.response.data.message || errorMessage;
+      } else if (error.request) {
+        errorMessage = "No response received from server";
+      }
+      
+      throw new Error(errorMessage);
+    }
+  };
+
+  // const formatObservationData = (data) => {
+  //   if (!data) return null;
+    
+  //   const dateObj = data.checkup?.date ? new Date(data.checkup.date) : new Date();
+    
+  //   const formattedData =  {
+  //     id: data.id,
+  //     patient: data.patient,
+  //     doctor: data.doctor ,
+  //     staff: data.staff,
+  //     date: data.date,
+  //     // time: data.time,
+  //     temperature: data.temperature || data.checkup?.temperature || "-",
+  //     bloodPressure: data.bloodPressure || data.checkup?.bloodPressure || "-",
+  //     spO2: data.spO2 || data.checkup?.spO2 || "-",
+  //     pulseRate: data.pulseRate || data.checkup?.pulseRate || "-",
+  //     diagnosis: data.diagnosis || data.checkup?.diagnosis || "-",
+  //     symptoms: data.symptoms || data.checkup?.symptoms || "-",
+  //     referredDoctor: data.referredDoctor || data.checkup?.referredDoctor || "-",
+  //     referredHospital: data.referredHospital || data.checkup?.referredHospital || "-",
+  //     isUnderObservation: data.isUnderObservation || false,
+  //     checkupMedicines: data.checkupMedicines || data.checkup?.CheckupMedicine || [],
+  //     observationMedicines: data.observationMedicines || (data.observation ? [{
+  //       brandName: data.observation.medicine?.brandName || "-",
+  //       dosage: data.observation.dosage || "-",
+  //       frequency: data.observation.frequency || "-",
+  //       dailyQuantity: data.observation.dailyQuantity || 0,
+  //       days: data.observation.days || 0,
+  //       totalQuantity: (data.observation.dailyQuantity || 0) * (data.observation.days || 0)
+  //     }] : [])
+  //   };
+  //   console.log('data: ');
+  //   console.log(formattedData);
+  //   return formattedData;
+  // };
+
+
 
   const fetchPrescriptionData = async () => {
     try {

@@ -67,6 +67,7 @@ import HospitalList from "./pages/HospitalList";
 import UpdateHospitalForm from "./pages/UpdateHospital";
 import VisitingSpecialist from "./pages/VisitingSpecialist.jsx";
 import ObservationHistory from "./pages/ObservationHistory";
+import UpdatePatientUnderObservationForm from "./components/UpdatePatientUnderObservationForm.jsx";
 
 function App() {
   const { userRole } = useAuthContext();
@@ -106,7 +107,7 @@ function App() {
           } />
           <Route path="/observation/update/:id" element={
             <ProtectedRoute routeName="UPDATE_OBSERVATION">
-              <UpdatePrescription />
+              <UpdatePatientUnderObservationForm />
             </ProtectedRoute>
           } />
           {/* Hospital Routes */}

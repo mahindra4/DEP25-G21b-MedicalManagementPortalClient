@@ -115,14 +115,14 @@ export default function AddAdminForm() {
               <div className="grid md:grid-cols-2 gap-y-8 gap-x-4 w-full">
                 <div className="flex-col md:flex md:flex-row items-center justify-around p-1">
                   <div className="flex mr-4 w-full md:w-72 justify-end">
-                    <label htmlFor="adminName">
+                    <label htmlFor="diagnosis">
                       Diagnosis <span className="text-red-800">*</span>:
                     </label>
                   </div>
                   <Input
-                    id="adminName"
+                    id="diagnosis"
                     size="md"
-                    label="Full Name"
+                    label="diagnosis"
                     className="w-full"
                     name="diagnosis"
                     type="text"
@@ -134,14 +134,14 @@ export default function AddAdminForm() {
                 </div>
                 <div className="flex-col md:flex md:flex-row items-center justify-around p-1">
                   <div className="flex mr-2 w-full md:w-72 justify-end">
-                    <label htmlFor="email">
+                    <label htmlFor="symptom">
                       Symptom <span className="text-red-800">*</span>:
                     </label>
                   </div>
                   <Input
-                    id="email"
+                    id="symptom"
                     size="md"
-                    label="Email"
+                    label="symptom"
                     name="symptom"
                     type="text"
                     className="w-full"

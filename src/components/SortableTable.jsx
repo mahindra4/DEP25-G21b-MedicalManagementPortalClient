@@ -320,11 +320,11 @@ export function SortableTable({
           </div>
           {title !== "Pending Request List" && (
             <div className="flex justify-evenly md:justify-normal w-full md:w-72">
-              <Tooltip content="Copy to Clipboard">
+              {/* <Tooltip content="Copy to Clipboard">
                 <IconButton variant="text" onClick={copyToClipboard}>
                   <DocumentIcon className="h-4 w-4" />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
               <Tooltip content="Export to Excel">
                 <IconButton variant="text" onClick={exportToExcel}>
                   <FontAwesomeIcon icon={faFileExcel} className="h-4 w-4" />
@@ -341,11 +341,11 @@ export function SortableTable({
                   )}
                 </IconButton>
               </Tooltip>
-              <Tooltip content="Save as PDF">
+              {/* <Tooltip content="Save as PDF">
                 <IconButton variant="text" onClick={exportToPDF}>
                   <ArrowDownTrayIcon className="h-4 w-4" />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </div>
           )}
         </div>

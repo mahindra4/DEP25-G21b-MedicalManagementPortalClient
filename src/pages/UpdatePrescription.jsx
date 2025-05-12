@@ -1,12 +1,11 @@
 import React from 'react'
-import UpdatePrescriptionForm from '../components/UpdatePrescriptionForm';
-
+import UpdatePrescriptionNewForm from '../components/UpdatePrescriptionNewForm';
 const UpdatePrescription = () => {
   return (
     <>    
-    <UpdatePrescriptionForm />
-  </>
-    )
+      <UpdatePrescriptionNewForm />
+    </>
+  )
 }
 
 export default UpdatePrescription;
